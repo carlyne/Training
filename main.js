@@ -11,24 +11,41 @@ function animateTitle(selector) {
 		return;
 	}
 
-	const children = Array.from(title.childNodes);
+	spanify(title);
+
+	// Animation mot par mot
+	Array.from(title.querySelectorAll('span span').forEach((span, i) => {
+		span.style.animationDelay = (i * .2) + 's';
+	}))
+}
+
+/**
+ * Entoure chaque mot d'une span (récursive)
+ * @param {Node} element 
+ */
+function spanify(element) {
+	const children = Array.from(element.childNodes);
 	let elements = [];
 
 	children.forEach(child => {
 		if (child.nodeType === Node.TEXT_NODE) {
-			const words = child.textContent.split(' ');
+			const words = child.textContent.trim(' ').split(' ');
 			const spans = words.map(wrapWord);
 
 			elements = elements.concat(injectElementBetweenItems(spans, document.createTextNode(' ')));
 
-		} else {
+		} else if (child.tagName === 'BR') {
 			elements.push(child)
+		} else {
+			spanify(child);
+			element.push(child);
 		};
 	})
 
-	title.innerHTML = '';
+	// Injection des éléments dans le titre
+	element.innerHTML = '';
 	elements.forEach(el => {
-		title.appendChild(el);
+		element.appendChild(el);
 	})
 }
 
@@ -42,7 +59,7 @@ function wrapWord(word) {
 
 	span.appendChild(childSpan);
 	childSpan.innerHTML = word;
-	
+
 	return span
 }
 
