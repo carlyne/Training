@@ -4,7 +4,64 @@
  */
 
 function animateTitle(selector) {
-	// code
+	const title = document.querySelector(selector);
+
+	if (title === null) {
+		console.error('Impossible de trouver element' + selector);
+		return;
+	}
+
+	const children = Array.from(title.childNodes);
+	let elements = [];
+
+	children.forEach(child => {
+		if (child.nodeType === Node.TEXT_NODE) {
+			const words = child.textContent.split(' ');
+			const spans = words.map(wrapWord);
+
+			elements = elements.concat(injectElementBetweenItems(spans, document.createTextNode(' ')));
+
+		} else {
+			elements.push(child)
+		};
+	})
+
+	title.innerHTML = '';
+	elements.forEach(el => {
+		title.appendChild(el);
+	})
 }
 
-animateTitle('.title')
+/**
+ * Rajoute 2 <span> a un mot
+ * @param {string} word 
+ */
+function wrapWord(word) {
+	const span = document.createElement('span');
+	const childSpan = document.createElement('span');
+
+	span.appendChild(childSpan);
+	childSpan.innerHTML = word;
+	
+	return span
+}
+
+/**
+ * Injecter des éléments entre des noeuds
+ * @param {Node[]} arr 
+ * @param {Node} element
+ * @return {Node[]} 
+ */
+function injectElementBetweenItems(arr, element) {
+	return arr.map((item, i) => {
+		if (i === arr.length - 1) {
+			return [item]
+		}
+		return [item, element.cloneNode()]
+	}).reduce((acc, pair) => {
+		acc = acc.concat(pair);
+		return acc
+	}, [])
+}
+
+animateTitle('.title');
