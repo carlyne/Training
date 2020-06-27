@@ -11,34 +11,38 @@ function animateTitle(selector) {
 		return;
 	}
 
-	spanify(title);
+	const spans = spanify(title);
 
 	// Animation mot par mot
-	Array.from(title.querySelectorAll('span span').forEach((span, i) => {
-		span.style.animationDelay = (i * .2) + 's';
-	}))
+	spans.forEach((span, i) => {
+		span.children[0].style.animationDelay = (i * .2) + 's';
+	})
 }
 
 /**
  * Entoure chaque mot d'une span (récursive)
- * @param {Node} element 
+ * @param {Node} element
+ * @return {HTMLSpanElement[]} 
  */
 function spanify(element) {
 	const children = Array.from(element.childNodes);
+	let spans = [];
 	let elements = [];
 
 	children.forEach(child => {
 		if (child.nodeType === Node.TEXT_NODE) {
-			const words = child.textContent.trim(' ').split(' ');
-			const spans = words.map(wrapWord);
+			const words = child.textContent.split(' ');
+			const wordSpans = words.map(wrapWord);
 
-			elements = elements.concat(injectElementBetweenItems(spans, document.createTextNode(' ')));
+			spans = spans.concat(wordSpans);
+
+			elements = elements.concat(injectElementBetweenItems(wordSpans, document.createTextNode(' ')));
 
 		} else if (child.tagName === 'BR') {
 			elements.push(child)
 		} else {
-			spanify(child);
-			element.push(child);
+			spans = spans.concat(spanify(child));
+			elements.push(child);
 		};
 	})
 
@@ -47,6 +51,7 @@ function spanify(element) {
 	elements.forEach(el => {
 		element.appendChild(el);
 	})
+	return spans;
 }
 
 /**
