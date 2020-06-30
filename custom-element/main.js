@@ -3,7 +3,7 @@ class Tabs extends HTMLElement {
 		this.setAttribute('role', 'tablist');
 		const tabs = Array.from(this.children);
 
-		tabs.forEach((tab, index) => {
+		tabs.forEach((tab, i) => {
 			const id = tab.getAttribute('href').replace('#', '');
 			const tabpanel = document.getElementById(id);
 
@@ -19,10 +19,21 @@ class Tabs extends HTMLElement {
 			tabpanel.setAttribute('tabindex', '0');
 
 			tab.addEventListener('keyup', e => {
+				let index = null;
+
 				if (e.key === 'ArrowRight') {
-					const tab = tabs[index + 1];
-					this.activate(tab);
-					tab.focus();
+					index = i === tabs.length - 1 ? 0 : i + 1;
+				} else if (e.key === 'ArrowLeft') {
+					index = i === 0 ? tabs.length - 1 : i - 1;
+				} else if(e.key === 'Home') {
+					index = 0;
+				} else if (e.key === 'End') {
+					index = tabs.length - 1;
+				}
+
+				if(index !== null) {
+					this.activate(tabs[index]);
+					tabs[index].focus();
 				}
 			})
 
