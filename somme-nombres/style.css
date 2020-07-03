@@ -1,0 +1,32 @@
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0
+}
+
+body {
+	font-family: sans-serif;
+	width: 100%;
+	height: 100vh;
+	display: flex;
+}
+
+main {
+	margin: auto;
+}
+
+h1, h2 {
+	margin: inherit;
+}
+
+h1 {
+	margin-bottom: 60px;
+}
+
+section {
+	margin-bottom: 30px;;
+}
+
+.calcul-area{
+	margin-bottom: 30px;
+}
