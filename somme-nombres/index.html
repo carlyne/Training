@@ -5,27 +5,31 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="style.css">
 	<script src="main.js" defer></script>
-	<title>Plus long caractère</title>
+	<title>Sommes de nombres</title>
 </head>
 <body>
 
 	<main>
-		<h1>Le plus long mot</h1>
+		<h1>Sommes de nombres</h1>
 
 		<section>
-			<h2>Saisir une phrase :</h2>
+			<h2>Saisir un calcul :</h2>
 
 			<div class="user-entry">
-				<label for="entry">Votre texte :</label>
-				<input type="text" id="entry" name="entry">
-				<button id="submit-btn" type="submit">Valider</button>
+				<label>Votre calcul :</label>
+				<div id="calcul-area">
+					<input type="number" min="0" max="1500" step="1" value="0" placeholder="0">
+					<span>+</span>
+					<input type="number" min="0" max="1500" step="1" value="0" placeholder="0">
+				</div>
+				<button id="add-nb" type="button">Ajouter une valeur</button>
+				<button id="submit-btn" type="submit">Résultat</button>
 			</div>
-		
 		</section>	
 
 		<section>
-			<h2>Le mot le plus long est :</h2>
-			<p id="longest-word">resultat</p>
+			<h2>La somme des nombres est :</h2>
+			<p id="result">resultat</p>
 		</section>
 	</main>
 </body>
