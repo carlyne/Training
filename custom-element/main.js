@@ -59,6 +59,18 @@ class Tabs extends HTMLElement {
 
 		// Activation de l'onglet actif
 		this.activate(currentTab, false);
+
+		/**
+		 * Si la navigation est en milieu de page,on aura besoin de scroller jusqu'à l'élémen visible
+		 * if (currentTab.getAttribute('aria-controls') === hash) {
+		 * 		window.requestAnimationFrame(() => {
+		 * 			currentTab.scrollIntoView({
+		 *				behavior: 'smooth'
+		 * 			});
+		 * 		})
+		 * }
+		 */	
+		
 	}
 
 	/**
