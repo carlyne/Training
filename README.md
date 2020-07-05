@@ -4,6 +4,9 @@ Quelques petits exercices et tutos pour assimiler les bonnes pratiques JavaScrip
 ## Animation de titre 
 Tuto - Exercice d'animation sur un titrage, animation mot par mot.
 
+## Custom-element
+Tuto - Exercice de navigation par onglet en utilisant les custom elements et l'accessibilité.
+
 ## Plus long caractère
 Exercice personnel - Recherche de méthode pour trouver le mot le plus long dans une chaîne de caractères.
 
