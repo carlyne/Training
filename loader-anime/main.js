@@ -3,13 +3,36 @@ class SpinningDots extends HTMLElement {
         super();
         const width = 50;
         const circleRadius = 4;
-        const circles = 8;
+        const circles = parseInt(this.getAttribute('dots'), 10) || 8;
+        const stroke = (circleRadius * 2);
         const root = this.attachShadow({mode: 'open'});
 
         root.innerHTML = `<div>
-            ${this.buildStyle(width)}
+            ${this.buildStyle(width, stroke, circles)}
+            ${this.buildTrainee((width / 2 - circleRadius), stroke)}
             ${this.buildCircles(width, circles, circleRadius)}
         </div>`;
+    }
+
+    /**
+     * Construit la trainee du loader
+     * @param {number} r rayon du cercle
+     * @param {number} stroke epaisseur du trait
+     * @returns {string}
+     */
+    buildTrainee(r, stroke) {
+        const w = r * 2 + stroke;
+        let dom = `<svg class="trainee" width="${w}" height="${w}" viewBox="0 0 ${w} ${w}" fill="none">`;
+
+        dom += `<circle 
+            cx="${w / 2}" 
+            cy="${w / 2}" r="${r}" 
+            stroke="currentColor"
+            stroke-width="${stroke}"
+            stroke-linecap="round"  
+        />`;
+
+        return dom + `</svg>`;
     }
 
     /**
@@ -20,7 +43,13 @@ class SpinningDots extends HTMLElement {
      * @returns {string}
      */
     buildCircles(w, n, r) {
-        let dom = `<svg class="circles" width="${w}" height="${w}" viewBox="0 0 ${w} ${w}">`;
+        let dom = `<svg 
+            class="circles" 
+            width="${w}" 
+            height="${w}" 
+            viewBox="0 0 ${w} ${w}"
+            >`;
+
         const radius = (w / 2 - r);
 
         for (let i = 0; i < n; i++) {
@@ -28,7 +57,12 @@ class SpinningDots extends HTMLElement {
             const x = radius * Math.sin(angle) + w / 2;
             const y = radius * Math.cos(angle) + w / 2;
 
-            dom += `<circle cx="${x}" cy="${y}" r="${r}" fill="currentColor"/>`;
+            dom += `<circle 
+                cx="${x}" 
+                cy="${y}" 
+                r="${r}" 
+                fill="currentColor"
+            />`;
         }
 
         return dom + `</svg>`;
@@ -36,10 +70,14 @@ class SpinningDots extends HTMLElement {
 
     /**
      * Construit le style du loader
-     * @param {number} w largeur de l'élément 
+     * @param {number} w largeur de l'élément
+     * @param {number} stroke largeur du trait
+     * @param {number} n nombre de sections
      * @returns {string}
      */
-    buildStyle(w) {
+    buildStyle(w, stroke, n) {
+        const perimeter = Math.PI * (w - stroke);
+
         return `<style>
             :host {
                 display: inline-block;
@@ -48,7 +86,13 @@ class SpinningDots extends HTMLElement {
             div {
                 width: ${w}px;
                 height: ${w}px;
-                background: chartreuse;
+                position: relative;
+            }
+
+            svg {
+                position: absolute;
+                top: 0;
+                left: 0;
             }
 
             .circles {
@@ -58,6 +102,27 @@ class SpinningDots extends HTMLElement {
             @keyframes spin {
                 from {transform: rotate(0 deg)}
                 to {transform: rotate(360deg)}
+            }
+
+            .trainee {
+                stroke-dasharray: ${perimeter};
+                stroke-dashoffset: ${perimeter + (perimeter / n)};
+                animation: spin-trainee 1.6s cubic-bezier(.5, .15, .5, .85) infinite;
+            }
+
+            .trainee circle {
+                animation: trainee-variation 1.6s cubic-bezier(.5, .15, .5, .85) infinite
+            }
+
+            @keyframes spin-trainee {
+                from {transform: rotate(0 deg)}
+                to {transform: rotate(720deg)}
+            }
+
+            @keyframes trainee-variation {
+                from% {stroke-dashoffset: ${perimeter + (perimeter / n)}}
+                50% {stroke-dashoffset: ${perimeter + (2.5 * (perimeter / n))}}
+                100% {stroke-dashoffset: ${perimeter + (perimeter / n)}}
             }
         </style>`
     }

@@ -14,3 +14,8 @@ body {
 main {
 	margin: auto;
 }
+
+spinning-dots {
+	margin: 10px;
+	display: block;
+}
