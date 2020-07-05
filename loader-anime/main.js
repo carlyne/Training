@@ -1,8 +1,8 @@
 class SpinningDots extends HTMLElement {
     constructor () {
         super();
-        const width = 50;
-        const circleRadius = 4;
+        const width = parseInt(window.getComputedStyle(this).width.replace('px', '')) || 28;
+        const circleRadius = (2/28) * width;
         const circles = parseInt(this.getAttribute('dots'), 10) || 8;
         const stroke = (circleRadius * 2);
         const root = this.attachShadow({mode: 'open'});

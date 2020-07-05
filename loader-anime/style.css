@@ -19,3 +19,7 @@ spinning-dots {
 	margin: 10px;
 	display: block;
 }
+
+spinning-dots.large {
+	width: 100px;
+}
